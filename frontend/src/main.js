@@ -31,3 +31,27 @@ recognitionButton.addEventListener("click", () => {
     socketManager.send(transcript);
   });
 });
+
+const startGameButton = document.getElementById("start-game");
+startGameButton.addEventListener("click", () => {
+  socketManager.send(JSON.stringify({ type: "START_GAME" }));
+});
+
+audioManager.onEnded(() => {
+  socketManager.send(JSON.stringify({ type: "AUDIO_ENDED" }));
+});
+
+socketManager.onMessage = (data) => {
+  let message = JSON.parse(data);
+
+  switch (message.type) {
+    case "PLAY_AUDIO":
+      audioManager.play(message.audioId);
+      break;
+    case "STOP_AUDIO":
+      audioManager.stop();
+      break;
+    default:
+      console.log("Message inconnu :", message);
+  }
+};

@@ -3,13 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
     <title>frontend</title>
+    <style>
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background-color: #242a32;
+        color: #ffffff;
+      }
+    </style>
   </head>
   <body>
     <p>Hello hello</p>
     <button id="test-audio">Play audio</button>
     <button id="send">Send to server</button>
     <button id="recognition-button">Reconnaissance vocale</button>
+    <button id="start-game">Démarrer le jeu</button>
     <p id="spoken-word"></p>
     <script type="module" src="/src/main.js"></script>
   </body>

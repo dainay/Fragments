@@ -1,6 +1,7 @@
 export default class SocketManager {
-  constructor(url) {
+  constructor(url, onMessage = () => {}) {
     this.socket = new WebSocket(url);
+    this.onMessage = onMessage;
     this.init();
   }
 
@@ -11,6 +12,7 @@ export default class SocketManager {
 
     this.socket.addEventListener("message", (event) => {
       console.log("Le message du serveur est :", event.data);
+      this.onMessage(event.data);
     });
 
     this.socket.addEventListener("error", (error) => {

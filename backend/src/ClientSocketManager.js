@@ -1,8 +1,9 @@
-import { WebSocketServer } from "ws";
+import { WebSocket, WebSocketServer } from "ws";
 
 export default class ClientSocketManager {
   constructor(port) {
     this.socket = new WebSocketServer({ port: port });
+    this.messageCallback = () => {};
     this.initialize();
   }
 
@@ -11,7 +12,9 @@ export default class ClientSocketManager {
       console.log("Nouvelle connexion WebSocket");
 
       ws.on("message", (message) => {
-        console.log("Message reçu du client :", message.toString());
+        const text = message.toString();
+        console.log("Message reçu du client :", text);
+        this.messageCallback(text);
       });
 
       ws.on("error", (error) => {
@@ -20,11 +23,15 @@ export default class ClientSocketManager {
     });
   }
 
-  sendToAllClients(message) {
+  onMessage(callback) {
+    this.messageCallback = callback;
+  }
+
+  broadcast(data) {
+    const text = JSON.stringify(data);
     this.socket.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
-        const messageStr = message.toString();
-        client.send(messageStr);
+        client.send(text);
       }
     });
   }
