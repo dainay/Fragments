@@ -19,4 +19,13 @@ export default class ClientSocketManager {
       });
     });
   }
+
+  sendToAllClients(message) {
+    this.socket.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        const messageStr = message.toString();
+        client.send(messageStr);
+      }
+    });
+  }
 }
