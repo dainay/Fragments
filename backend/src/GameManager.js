@@ -9,6 +9,18 @@ export default class GameManager {
     this.phase = "IDLE";
     this.reminderIndex = 0;
     this.reminderTimer = null;
+
+    this.globalDialog = [
+      "SCENE_DIALOGUE_01.mp3",
+      "SCENE_DIALOGUE_02.mp3",
+      "SCENE_DIALOGUE_03.mp3",
+      "SCENE_DIALOGUE_04.mp3",
+      "SCENE_DIALOGUE_05.mp3",
+      "SCENE_DIALOGUE_06.mp3",
+      "SCENE_DIALOGUE_07.mp3",
+      "SCENE_DIALOGUE_08.mp3",
+      "SCENE_DIALOGUE_09.mp3",
+    ];
   }
 
   parseJsonMessage(message) {
@@ -41,7 +53,7 @@ export default class GameManager {
       case "ARDUINO_ACTION":
         this.onArduinoAction(parseMessage.action);
         break;
-      case "SPEECH_DETECTED":
+      case "SPEECH_ACTION":
         this.onSpeechDetected(parseMessage.transcript);
         break;
       case "DEBUG_MESSAGE":
@@ -173,13 +185,26 @@ export default class GameManager {
 
   scheduleNextReminder() {
     const reminders = this.scene.audio?.reminders;
-    if (!reminders || reminders.length === 0) {
+    const eligibleScenes = ["EARS", "EYES", "NOSE"];
+    const useGlobalDialog = eligibleScenes.includes(this.scene.id);
+
+    if (reminders.length === 0 && !useGlobalDialog) {
       return;
     }
 
     this.stopReminders();
     this.reminderTimer = setTimeout(() => {
-      const file = reminders[this.reminderIndex % reminders.length];
+      const canPlayGlobalDialog =
+        useGlobalDialog && this.globalDialog.length > 0;
+
+      // 20% de chance -> global dialog
+      const playGlobalDialog = canPlayGlobalDialog && Math.random() < 0.2;
+      const audioList = playGlobalDialog ? this.globalDialog : reminders;
+
+      if (audioList.length === 0) return;
+
+      const randomIndex = Math.floor(Math.random() * audioList.length);
+      const file = audioList[randomIndex];
       this.reminderIndex++;
       this.playAudio(file);
     }, this.scene.reminderDelay);

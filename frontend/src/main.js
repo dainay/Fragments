@@ -36,26 +36,35 @@ speechRecognitionManager.onState((state, error) => {
   }
 });
 
-function activateSpeechRecognition() {
-  let hasResult = false;
+let speechTimeoutId = null;
 
-  const timeoutId = setTimeout(() => {
-    console.log("Attente en cours pour le speech des 20secondes");
+function activateSpeechRecognition() {
+  if (speechTimeoutId !== null) {
+    clearTimeout(speechTimeoutId);
+  }
+
+  let hasResult = false;
+  console.log("Reconnaissance vocale activée, timer démarré");
+
+  speechTimeoutId = setTimeout(() => {
+    console.log("10 secondes écoulées sans résultat vocal");
     if (hasResult) return;
 
     socketManager.send(
-      JSON.stringify({ event: "SPEECH_DETECTED", transcript: "test" }),
+      JSON.stringify({ event: "SPEECH_ACTION", transcript: "test" }),
     );
-  }, 20000);
+    speechTimeoutId = null;
+  }, 10000);
 
   speechRecognitionManager.onResult((transcript) => {
-    hasResult = true;
-    clearTimeout(timeoutId);
     transcript = transcript.trim().replace(/\s+/g, " ").toLowerCase();
+    if (!transcript) return;
+
+    hasResult = true;
+    clearTimeout(speechTimeoutId);
+    speechTimeoutId = null;
     elementWord.textContent = transcript;
-    socketManager.send(
-      JSON.stringify({ event: "SPEECH_DETECTED", transcript }),
-    );
+    socketManager.send(JSON.stringify({ event: "SPEECH_ACTION", transcript }));
   });
   speechRecognitionManager.start();
 }

@@ -2,16 +2,16 @@ export const stepScene = [
   {
     id: "INTRODUCTION",
     title: "Introduction",
-    led: [],
+    led: 1,
     expectedEvent: { event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" },
     audio: {
       introduction: null,
       reminders: [
-        "SCENE01_01.mp3",
-        "SCENE01_02.mp3",
-        "SCENE01_03.mp3",
-        "SCENE01_04.mp3",
-        "SCENE01_05.mp3",
+        "SCENE_INTRODUCTION_01.mp3",
+        "SCENE_INTRODUCTION_02.mp3",
+        "SCENE_INTRODUCTION_03.mp3",
+        "SCENE_INTRODUCTION_04.mp3",
+        "SCENE_INTRODUCTION_05.mp3",
       ],
       success: null,
     },
@@ -21,15 +21,15 @@ export const stepScene = [
   {
     id: "MOUTH",
     title: "Mouth",
-    led: [1, 2, 3, 4, 5],
+    led: 1,
     expectedEvent: { event: "SPEECH_ACTION", transcript: "test" },
     audio: {
-      introduction: "SCENE02_INTRODUCTION.mp3",
+      introduction: "SCENE_MOUTH_INTRODUCTION.mp3",
       reminders: [
-        "SCENE02_01.mp3",
-        "SCENE02_02.mp3",
-        "SCENE02_03.mp3",
-        "SCENE02_04.mp3",
+        "SCENE_MOUTH_01.mp3",
+        "SCENE_MOUTH_02.mp3",
+        "SCENE_MOUTH_03.mp3",
+        "SCENE_MOUTH_04.mp3",
       ],
       success: null,
     },
@@ -38,14 +38,53 @@ export const stepScene = [
   },
   {
     id: "EARS",
+    title: "Ears",
+    led: 2,
+    expectedEvent: { event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" },
+    audio: {
+      introduction: null,
+      reminders: [
+        "SCENE_EARS_01.mp3",
+        "SCENE_EARS_02.mp3",
+        "SCENE_EARS_03.mp3",
+      ],
+      success: "SCENE_EARS_INTRODUCTION.mp3",
+    },
+    reminderDelay: 2000,
     nextScene: "EYES",
   },
   {
     id: "EYES",
+    title: "Eyes",
+    led: 3,
+    expectedEvent: { event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" },
+    audio: {
+      introduction: null,
+      reminders: [
+        "SCENE_EYES_01.mp3",
+        "SCENE_EYES_02.mp3",
+        "SCENE_EYES_03.mp3",
+      ],
+      success: "SCENE_EYES_INTRODUCTION.mp3",
+    },
+    reminderDelay: 2000,
     nextScene: "NOSE",
   },
   {
     id: "NOSE",
+    title: "Nose",
+    led: 4,
+    expectedEvent: { event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" },
+    audio: {
+      introduction: null,
+      reminders: [
+        "SCENE_NOSE_01.mp3",
+        "SCENE_NOSE_02.mp3",
+        "SCENE_NOSE_03.mp3",
+      ],
+      success: "SCENE_NOSE_INTRODUCTION.mp3",
+    },
+    reminderDelay: 2000,
     nextScene: null,
   },
 ];
