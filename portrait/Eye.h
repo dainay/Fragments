@@ -1,5 +1,6 @@
 #pragma once
 
 void eyeBegin();
+void eyeLookAt(int horizontal);
 
-void eyeLookAt(int horizontal, int vertical);
+bool lightRead(int maxLight);

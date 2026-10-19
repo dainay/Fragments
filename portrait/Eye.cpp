@@ -1,19 +1,23 @@
-#include <Arduino.h>
+#include <Arduino.h> 
 #include <Servo.h>
 #include "Eye.h"
-
  
-Servo servoX;
-Servo servoY;
+Servo servo;
 
- 
-void eyeBegin() {
-  servoX.attach(4);  
-  servoY.attach(7);  
+const int PHOTO_PIN = 0;
+const int SERVO_PIN = 8;
+
+
+//-----------------light----------------
+bool lightRead(int maxLight){
+  return (analogRead(PHOTO_PIN) > maxLight) ; 
 }
 
+//-----------------eye----------------
+void eyeBegin() {
+  servo.attach(SERVO_PIN);  
+}
  
-void eyeLookAt(int horizontal, int vertical) {
-  servoX.write(horizontal);
-  servoY.write(vertical);
+void eyeLookAt(int horizontal) {
+  servo.write(horizontal); 
 }
