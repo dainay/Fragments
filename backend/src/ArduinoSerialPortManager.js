@@ -26,8 +26,8 @@ export default class ArduinoSerialPort {
   }
 
   receive(callback) {
-    this.serialPort.on("data", (data) => {
-      callback(data.toString());
+    this.parser.on("data", (line) => {
+      callback(line.trim());
     });
   }
 }
