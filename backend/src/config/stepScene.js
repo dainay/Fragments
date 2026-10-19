@@ -3,7 +3,7 @@ export const stepScene = [
     id: "INTRODUCTION",
     title: "Introduction",
     led: 1,
-    expectedEvent: { event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" },
+    expectedEvent: { event: "SPEECH_ACTION", transcript: "test" },
     audio: {
       introduction: null,
       reminders: [

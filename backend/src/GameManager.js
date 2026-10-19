@@ -145,14 +145,11 @@ export default class GameManager {
 
   onSpeechDetected(transcript) {
     const expectedEventTranscript = this.scene.expectedEvent?.transcript;
-
     transcript = transcript.trim().replace(/\s+/g, " ").toLowerCase();
-
     console.log("Voix :", transcript, "| attendu :", expectedEventTranscript);
     if (
-      // Si je reçois le bon mot
       this.phase === "WAITING_FOR_ACTION" &&
-      transcript === expectedEventTranscript
+      transcript.includes(expectedEventTranscript)
     ) {
       this.clientSocket.broadcast({ event: "STOP_SPEECH" });
       this.onActionDetected();

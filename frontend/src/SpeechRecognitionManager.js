@@ -42,7 +42,12 @@ export default class SpeechRecognitionManager {
 
   onResult(callback) {
     this.recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
+      const transcript = Array.from(event.results)
+        .map((result) => result[0].transcript)
+        .join("")
+        .trim()
+        .toLowerCase();
+      console.log("Transcript reçu :", transcript);
       callback(transcript);
     };
   }
