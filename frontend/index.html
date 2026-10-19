@@ -4,29 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/src/style.css" />
     <title>frontend</title>
-    <style>
-      body {
-        min-height: 100vh;
-        margin: 0;
-        background-color: #242a32;
-        color: #ffffff;
-      }
-    </style>
   </head>
   <body>
-    <p>Hello hello</p>
-    <button id="test-audio">Play audio</button>
+    <!-- <button id="test-audio">Play audio</button>
     <button id="send">Send to server</button>
     <button id="recognition-button">Reconnaissance vocale</button>
-    <button id="start-game">Démarrer le jeu</button>
     <p id="spoken-word"></p>
-    <p id="element-word"></p>
+    <p id="element-word"></p> -->
 
     <div class="game-container">
-      <p>Phase actuelle<span class="game-phase">IDLE</span></p>
-      <p>SEND PLAYER_DETECTED</p>
+      <button id="start-game">Start the game</button>
+      <button id="pass-action-arduino">Pass action to Arduino</button>
     </div>
+
+    <div class="debug-microphone">
+      <p id="microphone-status"></p>
+      <p id="element-word"></p>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

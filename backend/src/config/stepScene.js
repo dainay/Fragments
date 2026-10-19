@@ -2,7 +2,7 @@ export const stepScene = [
   {
     id: "INTRODUCTION",
     title: "Introduction",
-    led: 1,
+    led: null,
     expectedEvent: { event: "SPEECH_ACTION", transcript: "test" },
     audio: {
       introduction: null,

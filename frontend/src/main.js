@@ -5,23 +5,34 @@ import SpeechRecognitionManager from "./SpeechRecognitionManager";
 const socketManager = new SocketManager("ws://localhost:8080");
 const audioManager = new AudioManager();
 
-// Debugging: Play audio when the button is clicked
-const playAudioButton = document.getElementById("test-audio");
-playAudioButton.addEventListener("click", () => {
-  audioManager.play("SCENE01_01.mp3");
+const passArduinoActionButton = document.getElementById("pass-action-arduino");
+passArduinoActionButton.addEventListener("click", () => {
+  socketManager.send(
+    JSON.stringify({ event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" }),
+  );
 });
+
+// Debugging: Play audio when the button is clicked
+// const playAudioButton = document.getElementById("test-audio");
+// playAudioButton.addEventListener("click", () => {
+//   audioManager.play("SCENE01_01.mp3");
+// });
 
 // Debugging : send a message to server
-const sendButton = document.getElementById("send");
-sendButton.addEventListener("click", () => {
-  const message = "Hello from the frontend!";
-  socketManager.send(JSON.stringify({ event: "DEBUG_MESSAGE", message }));
-});
+// const sendButton = document.getElementById("send");
+// sendButton.addEventListener("click", () => {
+//   const message = "Hello from the frontend!";
+//   socketManager.send(JSON.stringify({ event: "DEBUG_MESSAGE", message }));
+// });
 
 // Debugging: Speech recognition
-const recognitionButton = document.getElementById("recognition-button");
-const spokenWordElement = document.getElementById("spoken-word");
+// const recognitionButton = document.getElementById("recognition-button");
+const spokenWordElement = document.getElementById("microphone-status");
 const elementWord = document.getElementById("element-word");
+
+// recognitionButton.addEventListener("click", () => {
+//   activateSpeechRecognition();
+// });
 
 const speechRecognitionManager = new SpeechRecognitionManager();
 
@@ -46,7 +57,7 @@ function activateSpeechRecognition() {
     socketManager.send(
       JSON.stringify({ event: "SPEECH_ACTION", transcript: "test" }),
     );
-  }, 20000);
+  }, 5000);
 
   speechRecognitionManager.onResult((transcript) => {
     hasResult = true;
@@ -57,10 +68,6 @@ function activateSpeechRecognition() {
   });
   speechRecognitionManager.start();
 }
-
-recognitionButton.addEventListener("click", () => {
-  activateSpeechRecognition();
-});
 
 const startGameButton = document.getElementById("start-game");
 startGameButton.addEventListener("click", () => {

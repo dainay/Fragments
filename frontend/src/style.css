@@ -1,0 +1,37 @@
+body {
+        margin: 0;
+        background-color: #242a32;
+        color: #ffffff;
+      }
+
+.game-container{
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#start-game{
+    background-color: transparent;
+    color:white;
+    border: 1px solid #fff;
+    padding : 12px 24px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+#start-game:hover{
+    background-color: #fff;
+    color:#242a32;
+}
+
+.debug-microphone{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    color: #fff;
+    padding: 10px;
+    border-top: 1px solid #fff;
+}
