@@ -50,18 +50,18 @@ speechRecognitionManager.onState((state, error) => {
 function activateSpeechRecognition() {
   let hasResult = false;
 
-  const timeoutId = setTimeout(() => {
-    console.log("Attente en cours pour le speech des 20secondes");
-    if (hasResult) return;
+  // const timeoutId = setTimeout(() => {
+  //   console.log("Attente en cours pour le speech des 20secondes");
+  //   if (hasResult) return;
 
-    socketManager.send(
-      JSON.stringify({ event: "SPEECH_ACTION", transcript: "test" }),
-    );
-  }, 5000);
+  //   socketManager.send(
+  //     JSON.stringify({ event: "SPEECH_ACTION", transcript: "test" }),
+  //   );
+  // }, 5000);
 
   speechRecognitionManager.onResult((transcript) => {
     hasResult = true;
-    clearTimeout(timeoutId);
+    // clearTimeout(timeoutId);
     transcript = transcript.trim().replace(/\s+/g, " ").toLowerCase();
     elementWord.textContent = transcript;
     socketManager.send(JSON.stringify({ event: "SPEECH_ACTION", transcript }));

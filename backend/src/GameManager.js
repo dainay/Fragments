@@ -9,6 +9,7 @@ export default class GameManager {
     this.phase = "IDLE";
     this.reminderIndex = 0;
     this.reminderTimer = null;
+    this.oldAudio = null;
 
     this.globalDialog = [
       "SCENE_DIALOGUE_01.mp3",
@@ -81,6 +82,7 @@ export default class GameManager {
     this.scene = scene;
     this.reminderIndex = 0;
     this.phase = "IDLE";
+    this.oldAudio = null;
 
     console.log(`SCÈNE ${sceneId} a démarré`);
 
@@ -194,14 +196,20 @@ export default class GameManager {
       const canPlayGlobalDialog =
         useGlobalDialog && this.globalDialog.length > 0;
 
-      // 20% de chance -> global dialog
-      const playGlobalDialog = canPlayGlobalDialog && Math.random() < 0.2;
+      const playGlobalDialog = canPlayGlobalDialog && Math.random() < 0.3;
       const audioList = playGlobalDialog ? this.globalDialog : reminders;
 
       if (audioList.length === 0) return;
 
       const randomIndex = Math.floor(Math.random() * audioList.length);
+
+      // Pas de répétition d'audio
+      if (audioList[randomIndex] === this.oldAudio) {
+        this.scheduleNextReminder();
+        return;
+      }
       const file = audioList[randomIndex];
+      this.oldAudio = file;
       this.reminderIndex++;
       this.playAudio(file);
     }, this.scene.reminderDelay);
@@ -212,7 +220,7 @@ export default class GameManager {
     this.reminderTimer = null;
   }
 
-  // ===============================
+  // ================================
   // ======== DEBUG FRONTEND ========
   // ================================
 }

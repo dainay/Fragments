@@ -3,7 +3,7 @@ export const stepScene = [
     id: "INTRODUCTION",
     title: "Introduction",
     led: null,
-    expectedEvent: { event: "SPEECH_ACTION", transcript: "test" },
+    expectedEvent: { event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" },
     audio: {
       introduction: null,
       reminders: [
@@ -22,7 +22,7 @@ export const stepScene = [
     id: "MOUTH",
     title: "Mouth",
     led: 1,
-    expectedEvent: { event: "SPEECH_ACTION", transcript: "test" },
+    expectedEvent: { event: "SPEECH_ACTION", transcript: "oui" },
     audio: {
       introduction: "SCENE_MOUTH_INTRODUCTION.mp3",
       reminders: [
@@ -33,7 +33,7 @@ export const stepScene = [
       ],
       success: null,
     },
-    reminderDelay: 2000,
+    reminderDelay: 4000,
     nextScene: "EARS",
   },
   {
