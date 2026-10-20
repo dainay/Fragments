@@ -112,6 +112,10 @@ socketManager.onMessage = (data) => {
       document.getElementById("current-scene").textContent = message.scene;
       document.getElementById("current-audio").textContent = message.audio;
       break;
+    case "DEBUG_SUCCESS_AUDIO":
+      console.log("DEBUG_SUCCESS_AUDIO :", message.audio);
+      document.getElementById("success-audio").textContent = message.audio;
+      break;
     default:
       console.log("Message inconnu :", message);
   }

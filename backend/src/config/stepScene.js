@@ -21,7 +21,7 @@ export const stepScene = [
   {
     id: "MOUTH",
     title: "Mouth",
-    led: 1,
+    led: 8,
     expectedEvent: { event: "SPEECH_ACTION", transcript: "oui" },
     audio: {
       introduction: "SCENE_MOUTH_INTRODUCTION.mp3",
@@ -33,13 +33,13 @@ export const stepScene = [
       ],
       success: null,
     },
-    reminderDelay: 4000,
+    reminderDelay: 2000,
     nextScene: "EARS",
   },
   {
     id: "EARS",
     title: "Ears",
-    led: 2,
+    led: 9,
     expectedEvent: { event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" },
     audio: {
       introduction: null,
@@ -50,7 +50,7 @@ export const stepScene = [
       ],
       success: "SCENE_EARS_INTRODUCTION.mp3",
     },
-    reminderDelay: 2000,
+    reminderDelay: 1000,
     nextScene: "EYES",
   },
   {
@@ -67,7 +67,7 @@ export const stepScene = [
       ],
       success: "SCENE_EYES_INTRODUCTION.mp3",
     },
-    reminderDelay: 2000,
+    reminderDelay: 1000,
     nextScene: "NOSE",
   },
   {
@@ -83,6 +83,19 @@ export const stepScene = [
         "SCENE_NOSE_03.mp3",
       ],
       success: "SCENE_NOSE_INTRODUCTION.mp3",
+    },
+    reminderDelay: 1000,
+    nextScene: null,
+  },
+  {
+    id: "FINAL_SCENE",
+    title: "Final Scene",
+    led: null,
+    expectedEvent: null,
+    audio: {
+      introduction: "SCENE_FINAL_INTRODUCTION.mp3",
+      reminders: [],
+      success: null,
     },
     reminderDelay: 2000,
     nextScene: null,

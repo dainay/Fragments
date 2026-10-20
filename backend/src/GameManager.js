@@ -1,8 +1,9 @@
 import { stepScene } from "./config/stepScene.js";
 
 export default class GameManager {
-  constructor(clientSocket) {
+  constructor(clientSocket, arduinoUno) {
     this.clientSocket = clientSocket;
+    this.arduinoUno = arduinoUno;
     this.stepScene = stepScene;
 
     this.scene = null;
@@ -75,6 +76,10 @@ export default class GameManager {
     if (!scene) {
       console.error(`Pas de scène trouvée : ${sceneId}`);
       return;
+    }
+
+    if (scene.led !== null) {
+      this.arduinoUno.send(scene.led.toString());
     }
 
     // Réinitialisation de l'état du jeu
@@ -203,7 +208,7 @@ export default class GameManager {
       const canPlayGlobalDialog =
         useGlobalDialog && this.globalDialog.length > 0;
 
-      const playGlobalDialog = canPlayGlobalDialog && Math.random() < 0.3;
+      const playGlobalDialog = canPlayGlobalDialog && Math.random() < 0.4;
       const audioList = playGlobalDialog ? this.globalDialog : reminders;
 
       if (audioList.length === 0) return;

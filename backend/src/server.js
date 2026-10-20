@@ -9,8 +9,9 @@ const BAUD_RATE = 9600;
 const webSocketManager = new ClientSocketManager(WS_PORT);
 const arduinoUno = new ArduinoSerialPort(PATH_TO_SERIAL, BAUD_RATE);
 
-const game = new GameManager(webSocketManager);
+const game = new GameManager(webSocketManager, arduinoUno);
 
+// Gestion des messages reçus depuis Arduino
 arduinoUno.receive((line) => {
   console.log("Arduino :", line);
   let message;
