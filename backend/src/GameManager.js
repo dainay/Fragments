@@ -86,6 +86,13 @@ export default class GameManager {
 
     console.log(`SCÈNE ${sceneId} a démarré`);
 
+    // ===== Front Debug =====
+    this.clientSocket.broadcast({
+      event: "DEBUG_SCENE",
+      message: sceneId,
+    });
+    // =======================
+
     // Est-ce qu'il y a une introduction ?
     const hasIntroduction = scene.audio?.introduction;
     // OUI
@@ -208,6 +215,15 @@ export default class GameManager {
         this.scheduleNextReminder();
         return;
       }
+
+      // ===== Front Debug =====
+      this.clientSocket.broadcast({
+        event: "DEBUG_SCENE",
+        audio: `Rappel ${this.reminderIndex + 1} : ${audioList[randomIndex]}`,
+        scene: this.scene.id,
+      });
+      // =======================
+
       const file = audioList[randomIndex];
       this.oldAudio = file;
       this.reminderIndex++;
@@ -219,8 +235,4 @@ export default class GameManager {
     clearTimeout(this.reminderTimer);
     this.reminderTimer = null;
   }
-
-  // ================================
-  // ======== DEBUG FRONTEND ========
-  // ================================
 }

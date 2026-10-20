@@ -5,10 +5,19 @@ import SpeechRecognitionManager from "./SpeechRecognitionManager";
 const socketManager = new SocketManager("ws://localhost:8080");
 const audioManager = new AudioManager();
 
+// Pass arduino action button
 const passArduinoActionButton = document.getElementById("pass-action-arduino");
 passArduinoActionButton.addEventListener("click", () => {
   socketManager.send(
     JSON.stringify({ event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" }),
+  );
+});
+
+// Pass speech action button
+const passSpeechActionButton = document.getElementById("pass-action-speech");
+passSpeechActionButton.addEventListener("click", () => {
+  socketManager.send(
+    JSON.stringify({ event: "SPEECH_ACTION", transcript: "oui" }),
   );
 });
 
@@ -79,6 +88,8 @@ audioManager.onEnded(() => {
   socketManager.send(JSON.stringify({ event: "AUDIO_ENDED" }));
 });
 
+// Une fonction qui permet de gérer les messages reçus depuis le serveur poru les afficher au front
+
 // Message reçu depuis le serveur
 socketManager.onMessage = (data) => {
   let message = JSON.parse(data);
@@ -95,6 +106,11 @@ socketManager.onMessage = (data) => {
       break;
     case "STOP_SPEECH":
       speechRecognitionManager.stop();
+      break;
+    case "DEBUG_SCENE":
+      console.log("DEBUG_SCENE :", message.message);
+      document.getElementById("current-scene").textContent = message.scene;
+      document.getElementById("current-audio").textContent = message.audio;
       break;
     default:
       console.log("Message inconnu :", message);

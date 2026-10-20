@@ -16,7 +16,24 @@
 
     <div class="game-container">
       <button id="start-game">Start the game</button>
-      <button id="pass-action-arduino">Pass action to Arduino</button>
+      <div class="action-buttons">
+        <button class="pass-btn" id="pass-action-arduino">
+          Pass Arduion action
+        </button>
+        <button class="pass-btn" id="pass-action-speech">
+          Pass Speech action
+        </button>
+      </div>
+    </div>
+    <div class="debug-container">
+      <div class="debug-scene-paragraph">
+        <p>La scène actuelle est :</p>
+        <p id="current-scene"></p>
+      </div>
+      <div class="debug-audio-paragraph">
+        <p>L'audio joué actuellement est :</p>
+        <p id="current-audio"></p>
+      </div>
     </div>
 
     <div class="debug-microphone">
