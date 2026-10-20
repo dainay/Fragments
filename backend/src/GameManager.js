@@ -9,6 +9,19 @@ export default class GameManager {
     this.phase = "IDLE";
     this.reminderIndex = 0;
     this.reminderTimer = null;
+    this.oldAudio = null;
+
+    this.globalDialog = [
+      "SCENE_DIALOGUE_01.mp3",
+      "SCENE_DIALOGUE_02.mp3",
+      "SCENE_DIALOGUE_03.mp3",
+      "SCENE_DIALOGUE_04.mp3",
+      "SCENE_DIALOGUE_05.mp3",
+      "SCENE_DIALOGUE_06.mp3",
+      "SCENE_DIALOGUE_07.mp3",
+      "SCENE_DIALOGUE_08.mp3",
+      "SCENE_DIALOGUE_09.mp3",
+    ];
   }
 
   parseJsonMessage(message) {
@@ -41,7 +54,7 @@ export default class GameManager {
       case "ARDUINO_ACTION":
         this.onArduinoAction(parseMessage.action);
         break;
-      case "SPEECH_DETECTED":
+      case "SPEECH_ACTION":
         this.onSpeechDetected(parseMessage.transcript);
         break;
       case "DEBUG_MESSAGE":
@@ -69,8 +82,16 @@ export default class GameManager {
     this.scene = scene;
     this.reminderIndex = 0;
     this.phase = "IDLE";
+    this.oldAudio = null;
 
     console.log(`SCÈNE ${sceneId} a démarré`);
+
+    // ===== Front Debug =====
+    this.clientSocket.broadcast({
+      event: "DEBUG_SCENE",
+      message: sceneId,
+    });
+    // =======================
 
     // Est-ce qu'il y a une introduction ?
     const hasIntroduction = scene.audio?.introduction;
@@ -133,14 +154,11 @@ export default class GameManager {
 
   onSpeechDetected(transcript) {
     const expectedEventTranscript = this.scene.expectedEvent?.transcript;
-
     transcript = transcript.trim().replace(/\s+/g, " ").toLowerCase();
-
     console.log("Voix :", transcript, "| attendu :", expectedEventTranscript);
     if (
-      // Si je reçois le bon mot
       this.phase === "WAITING_FOR_ACTION" &&
-      transcript === expectedEventTranscript
+      transcript.includes(expectedEventTranscript)
     ) {
       this.clientSocket.broadcast({ event: "STOP_SPEECH" });
       this.onActionDetected();
@@ -173,13 +191,41 @@ export default class GameManager {
 
   scheduleNextReminder() {
     const reminders = this.scene.audio?.reminders;
-    if (!reminders || reminders.length === 0) {
+    const eligibleScenes = ["EARS", "EYES", "NOSE"];
+    const useGlobalDialog = eligibleScenes.includes(this.scene.id);
+
+    if (reminders.length === 0 && !useGlobalDialog) {
       return;
     }
 
     this.stopReminders();
     this.reminderTimer = setTimeout(() => {
-      const file = reminders[this.reminderIndex % reminders.length];
+      const canPlayGlobalDialog =
+        useGlobalDialog && this.globalDialog.length > 0;
+
+      const playGlobalDialog = canPlayGlobalDialog && Math.random() < 0.3;
+      const audioList = playGlobalDialog ? this.globalDialog : reminders;
+
+      if (audioList.length === 0) return;
+
+      const randomIndex = Math.floor(Math.random() * audioList.length);
+
+      // Pas de répétition d'audio
+      if (audioList[randomIndex] === this.oldAudio) {
+        this.scheduleNextReminder();
+        return;
+      }
+
+      // ===== Front Debug =====
+      this.clientSocket.broadcast({
+        event: "DEBUG_SCENE",
+        audio: `Rappel ${this.reminderIndex + 1} : ${audioList[randomIndex]}`,
+        scene: this.scene.id,
+      });
+      // =======================
+
+      const file = audioList[randomIndex];
+      this.oldAudio = file;
       this.reminderIndex++;
       this.playAudio(file);
     }, this.scene.reminderDelay);

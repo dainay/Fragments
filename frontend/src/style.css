@@ -1,0 +1,65 @@
+p{
+    padding: 0;
+}
+body{
+        margin: 0;
+        background-color: #242a32;
+        color: #ffffff;
+        padding: 90px;
+
+}
+
+.game-container{
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+
+#start-game{
+    background-color: #43f57e;
+    color:#242a32;
+    border: 1px solid #43f57e;
+    padding : 12px 24px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+#start-game:hover{
+    background-color: transparent;
+    color:#43f57e;
+}
+
+.debug-microphone{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    color: #fff;
+    padding: 10px;
+    border-top: 1px solid #fff;
+}
+.action-buttons{
+    display: flex;
+    gap: 10px;
+}
+
+.pass-btn{
+    background-color: white;
+    color:#242a32;
+    border: 1px solid #fff;
+    padding : 12px 24px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+}
+.pass-btn:hover{
+    background-color: #242a32;
+    color:white;
+}
+.debug-scene-paragraph, .debug-audio-paragraph{
+    display: flex;
+    gap: 10px;
+}
+
+#current-scene, #current-audio{
+    color:#ffaf2e;
+}

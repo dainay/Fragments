@@ -3,7 +3,7 @@ import ClientSocketManager from "./ClientSocketManager.js";
 import GameManager from "./GameManager.js";
 
 const WS_PORT = 8080;
-const PATH_TO_SERIAL = "/dev/cu.usbmodem1101";
+const PATH_TO_SERIAL = "/dev/cu.usbmodem11101";
 const BAUD_RATE = 9600;
 
 const webSocketManager = new ClientSocketManager(WS_PORT);
@@ -12,7 +12,6 @@ const arduinoUno = new ArduinoSerialPort(PATH_TO_SERIAL, BAUD_RATE);
 const game = new GameManager(webSocketManager);
 
 arduinoUno.receive((line) => {
-  // {"event":"ARDUINO_ACTION","action":"PLAYER_DETECTED"}
   console.log("Arduino :", line);
   let message;
   try {
