@@ -5,7 +5,7 @@
 Servo servo;
 
 const int PHOTO_PIN = 0;
-const int SERVO_PIN = 13;
+const int SERVO_PIN = 7;
 
 
 //-----------------light----------------
@@ -20,4 +20,5 @@ void eyeBegin() {
  
 void eyeLookAt(int horizontal) {
   servo.write(horizontal); 
+  Serial.println("servo horizontal");
 }

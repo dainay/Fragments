@@ -20,4 +20,5 @@ void ledShow(int ledNumber) {
 
 void ledOff() {
   ledShow(0);
+  Serial.println("ledOff");
 }

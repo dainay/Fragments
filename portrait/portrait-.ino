@@ -1,11 +1,17 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include "Eye.h"
+//#include "Eye.h"
 #include "Nose.h"
 #include "Ear.h"
 #include "Mouth.h"
 #include "Distance.h"
 #include "Led.h"
+
+#include <Servo.h>
+
+Servo servo;
+
+const int SERVO_PIN = 7;
 
 bool GAME_STARTED = false;
 bool ACTION_SENT = false;
@@ -21,13 +27,20 @@ unsigned long lastPlayerCheck = 0;
 
 void setup() {
   Serial.begin(9600);
-  eyeBegin();
+  //eyeBegin();
   noseBegin();
   earBegin();
   mouthStart();
   startDistance();
   ledBegin();
-  eyeLookAt(EYE_CENTER_ANGLE);
+  //eyeLookAt(EYE_CENTER_ANGLE);
+  digitalWrite(8, HIGH);
+  digitalWrite(9, HIGH);
+  digitalWrite(10, HIGH);
+  digitalWrite(11, HIGH);
+  Serial.println("démarrage");
+ 
+  servo.attach(SERVO_PIN); 
 }
 
 void receiveMessages() {
@@ -103,30 +116,46 @@ void updateEyeTracking() {
   playerPosition = humanDetected();
 
   if (playerPosition == "onLeft") {
-    eyeLookAt(EYE_LEFT_ANGLE);
+    //eyeLookAt(EYE_LEFT_ANGLE);
   } else if (playerPosition == "onRight") {
-    eyeLookAt(EYE_RIGHT_ANGLE);
+    //eyeLookAt(EYE_RIGHT_ANGLE);
   } else {
-    eyeLookAt(EYE_CENTER_ANGLE);
+    //eyeLookAt(EYE_CENTER_ANGLE);
   }
 }
 
 void loop() {
 
+  servo.write(0); 
+  Serial.println("servo horizontal");
+  delay(1000);
+    servo.write(100); 
+      delay(1000);
 
-ledShow(2);
+// Serial.println("début loop");
+
+// ledShow(1); // (1 QUI FONCTIONNE PAS )
+// ledShow(2); // (2 FONCTIONNE PAS)
+// ledShow(3); // WORK
+// ledShow(4); // WORK
   receiveMessages();
 
-bool check = lightRead(900);
-Serial.println(check);
-//noseRotation();
-delay(1000);
-  if (!GAME_STARTED) {
-    return;
-  }
 
-  updateEyeTracking();
+//  if (!GAME_STARTED) {
+//    return;
+//  }
+ 
+// bool check = earPress();
 
+// bool check = lightRead(910); // OK
+ bool check = noseRotation();
+  Serial.println(check);
+  //eyeLookAt(0);
+  delay(500);
+  //eyeLookAt(150);
+  //updateEyeTracking();
+  // Serial.println(check);
+ 
   if (ACTION_SENT) {
     return;
   }
@@ -140,12 +169,13 @@ delay(1000);
       sendAction("EAR_PRESSED");
     }
   } else if (ACTIVE_SCENE == "EYES") {
-    if (lightRead(900)) {
+    //if (lightRead(900)) {
       sendAction("LIGHT_DETECTED");
     }
-  } else if (ACTIVE_SCENE == "NOSE") {
-    if (noseRotation()) {
-      sendAction("NOSE_ROTATED");
-    }
+  } 
+  //else if (ACTIVE_SCENE == "NOSE") {
+    //if (noseRotation()) {
+      //sendAction("NOSE_ROTATED");
+   // }
   }
 }

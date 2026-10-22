@@ -4,7 +4,7 @@
 const int BUTTON_PIN = 2;
 
 
-const unsigned long HOLD_TIME = 3000;
+const unsigned long HOLD_TIME = 1500;
 
 static bool wasPressed = false;
 static bool validated = false;
@@ -15,6 +15,8 @@ void earBegin() {
 }
 
 bool earPress() {
+
+  Serial.print("ear called");
   bool pressed = digitalRead(BUTTON_PIN) == LOW;
 
   if (!pressed) {
