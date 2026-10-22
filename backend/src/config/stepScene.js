@@ -93,7 +93,7 @@ export const stepScene = [
       reminders: [],
       success: null,
     },
-    reminderDelay: 4000,
+    reminderDelay: 5000,
     nextScene: null,
   },
 ];

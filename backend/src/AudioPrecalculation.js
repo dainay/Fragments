@@ -1,16 +1,14 @@
 import decode from "@audio/decode";
-import {
-  mkdirSync,
-  readFileSync,
-  readdirSync,
-  writeFileSync,
-} from "node:fs";
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const helperDirectory = dirname(fileURLToPath(import.meta.url));
-const audioDirectory = resolve(helperDirectory, "../../frontend/public/audio");
-const brightnessDirectory = resolve(helperDirectory, "../src/config/audioBrightness");
+const audioDirectory = resolve(helperDirectory, "../../frontend/public/audio2");
+const brightnessDirectory = resolve(
+  helperDirectory,
+  "../src/config/audioBrightness",
+);
 
 async function precalculateAudio(filepath) {
   const audio = await decode(readFileSync(filepath));
