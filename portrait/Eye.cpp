@@ -1,11 +1,11 @@
 #include <Arduino.h> 
 #include <Servo.h>
 #include "Eye.h"
- 
+
 Servo servo;
 
 const int PHOTO_PIN = 0;
-const int SERVO_PIN = 7;
+const int SERVO_PIN = 7; // @neroliprak -> y'aura un soucis ? puisque dans distance le echo est déjà branché dans PIN 7
 
 
 //-----------------light----------------

@@ -15,7 +15,7 @@ export default class GameManager {
     this.stepScene = stepScene;
 
     this.scene = null;
-    this.phase = "IDLE";
+    this.phase = "IDLE"; // Scène en attente au début (avant qu'on ait appuyé sur le btn valdier)
     this.reminderIndex = 0;
     this.reminderTimer = null;
     this.audioBrightnessTimer = null;
@@ -49,12 +49,14 @@ export default class GameManager {
   handleMessage(message) {
     let parseMessage = this.parseJsonMessage(message);
 
+    // on ignore tout sauf si le jeu est démarré par nous.
     if (!this.scene && parseMessage.event !== "START_GAME") {
       console.log("Jeu pas démarré, message ignoré :", parseMessage.event);
       return;
     }
 
     switch (parseMessage.event) {
+      // Frontend envoie "START_GAME" quand on appuie sur le bouton "Démarrer le jeu".
       case "START_GAME":
         this.arduinoSerialPort.send({ event: "START_GAME" });
         this.start("INTRODUCTION");
@@ -109,7 +111,9 @@ export default class GameManager {
       sendNextValue();
       this.audioBrightnessTimer = setInterval(sendNextValue, brightness.stepMs);
     } catch (error) {
-      console.log(`Erreur lors de la lecture de la luminosité pour ${file}: ${error.message}`);
+      console.log(
+        `Erreur lors de la lecture de la luminosité pour ${file}: ${error.message}`,
+      );
       this.arduinoSerialPort.send({ event: "AUDIO_BRIGHTNESS", value: 0 });
       console.error(`Pas de luminosité pour ${file}: ${error.message}`);
     }

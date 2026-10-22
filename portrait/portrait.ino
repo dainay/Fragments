@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
-//#include "Eye.h"
+#include "Eye.h" // je décommente pour la photoresistnce
 #include "Nose.h"
 #include "Ear.h"
 #include "Mouth.h"
@@ -9,9 +9,12 @@
 
 #include <Servo.h>
 
-Servo servo;
+// ---- @todo test du servo pour voir que ça fonctionne bien !!! ----
+// Servo testServo; // "servo" existe déjà dans Eye.cpp
+// const int SERVO_PIN = 7;
+// ---- @todo -----------------------------------------------------
 
-const int SERVO_PIN = 7;
+
 
 bool GAME_STARTED = false;
 bool ACTION_SENT = false;
@@ -27,7 +30,7 @@ unsigned long lastPlayerCheck = 0;
 
 void setup() {
   Serial.begin(9600);
-  //eyeBegin();
+  eyeBegin(); // je réactive à la place du test du servo
   noseBegin();
   earBegin();
   mouthStart();
@@ -39,10 +42,13 @@ void setup() {
   digitalWrite(10, HIGH);
   digitalWrite(11, HIGH);
   Serial.println("démarrage");
- 
-  servo.attach(SERVO_PIN); 
+  // ---- @todo test du servo pour voir que ça fonctionne bien !!! ----
+  // testServo.attach(SERVO_PIN); 
+  // ---- @todo -----------------------------------------------------
+
 }
 
+// reçoit les messages du serveur pour gérer les scène / actions actuelles
 void receiveMessages() {
   while (Serial.available() > 0) {
     String message = Serial.readStringUntil('\n');
@@ -116,9 +122,9 @@ void updateEyeTracking() {
   playerPosition = humanDetected();
 
   if (playerPosition == "onLeft") {
-    //eyeLookAt(EYE_LEFT_ANGLE);
+    //eyeLookAt(EYE_LEFT_ANGLE); // à décommenter quand on aura les capteurs de distance
   } else if (playerPosition == "onRight") {
-    //eyeLookAt(EYE_RIGHT_ANGLE);
+    //eyeLookAt(EYE_RIGHT_ANGLE); 
   } else {
     //eyeLookAt(EYE_CENTER_ANGLE);
   }
@@ -126,56 +132,65 @@ void updateEyeTracking() {
 
 void loop() {
 
-  servo.write(0); 
-  Serial.println("servo horizontal");
-  delay(1000);
-    servo.write(100); 
-      delay(1000);
+  // ---- @todo test du servo pour voir que ça fonctionne bien !!! ----
+  // testServo.write(50); 
+  // Serial.println("servo horizontal");
+  // delay(2000);
+  // testServo.write(170); 
+  // delay(2000);
+    // ---- @todo -----------------------------------------------------
+
 
 // Serial.println("début loop");
 
-// ledShow(1); // (1 QUI FONCTIONNE PAS )
-// ledShow(2); // (2 FONCTIONNE PAS)
-// ledShow(3); // WORK
-// ledShow(4); // WORK
+// ledShow(1); 
+// ledShow(2);
+// ledShow(3); 
+// ledShow(4); 
   receiveMessages();
 
 
 //  if (!GAME_STARTED) {
 //    return;
 //  }
- 
+
 // bool check = earPress();
 
-// bool check = lightRead(910); // OK
- bool check = noseRotation();
-  Serial.println(check);
+// bool check = lightRead(910);
+//  bool check = noseRotation();
+//   Serial.println(check);
   //eyeLookAt(0);
-  delay(500);
+  // delay(500);
   //eyeLookAt(150);
-  //updateEyeTracking();
   // Serial.println(check);
- 
+
+  
+  // updateEyeTracking(); //
   if (ACTION_SENT) {
     return;
   }
 
+  // Capteur de distance
   if (ACTIVE_SCENE == "INTRODUCTION") {
     if (playerPosition != "far") {
       sendAction("PLAYER_DETECTED");
     }
-  } else if (ACTIVE_SCENE == "EARS") {
+  } 
+  // Capteur de pression 
+  else if (ACTIVE_SCENE == "EARS") {
     if (earPress()) {
       sendAction("EAR_PRESSED");
     }
-  } else if (ACTIVE_SCENE == "EYES") {
-    //if (lightRead(900)) {
+  }
+  // Capteur de luminosité
+  else if (ACTIVE_SCENE == "EYES") {
+    if (lightRead(900)) {
       sendAction("LIGHT_DETECTED");
     }
-  } 
-  //else if (ACTIVE_SCENE == "NOSE") {
-    //if (noseRotation()) {
-      //sendAction("NOSE_ROTATED");
-   // }
+  }
+  else if (ACTIVE_SCENE == "NOSE") {
+    if (noseRotation()) {
+      sendAction("NOSE_ROTATED");
+   }
   }
 }
