@@ -22,7 +22,8 @@ export default class ArduinoSerialPort {
   }
 
   send(data) {
-    this.serialPort.write(data);
+    const message = typeof data === "string" ? data : JSON.stringify(data);
+    this.serialPort.write(`${message}\n`);
   }
 
   receive(callback) {

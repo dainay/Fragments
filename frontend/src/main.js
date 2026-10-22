@@ -4,12 +4,27 @@ import SpeechRecognitionManager from "./SpeechRecognitionManager";
 
 const socketManager = new SocketManager("ws://localhost:8080");
 const audioManager = new AudioManager();
+let currentScene = null;
+
+const arduinoActionsByScene = {
+  INTRODUCTION: "PLAYER_DETECTED",
+  EARS: "EAR_PRESSED",
+  EYES: "LIGHT_DETECTED",
+  NOSE: "NOSE_ROTATED",
+};
 
 // Pass arduino action button
 const passArduinoActionButton = document.getElementById("pass-action-arduino");
 passArduinoActionButton.addEventListener("click", () => {
+  const action = arduinoActionsByScene[currentScene];
+
+  if (!action) {
+    console.log(`Pas d'action Arduino pour la scène ${currentScene}`);
+    return;
+  }
+
   socketManager.send(
-    JSON.stringify({ event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" }),
+    JSON.stringify({ event: "ARDUINO_ACTION", action }),
   );
 });
 
@@ -108,7 +123,8 @@ socketManager.onMessage = (data) => {
       speechRecognitionManager.stop();
       break;
     case "DEBUG_SCENE":
-      console.log("DEBUG_SCENE :", message.message);
+      currentScene = message.scene;
+      console.log("DEBUG_SCENE :", currentScene);
       document.getElementById("current-scene").textContent = message.scene;
       document.getElementById("current-audio").textContent = message.audio;
       break;

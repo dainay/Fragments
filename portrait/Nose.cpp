@@ -26,9 +26,6 @@ void noseBegin() {
 
   if (!mpu.begin()) {
     Serial.println("MPU6050 not found");
-    while (true) {
-      delay(100);
-    }
   }
 
   delay(1000);

@@ -1,14 +1,24 @@
 import { stepScene } from "./config/stepScene.js";
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const brightnessDirectory = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "./config/audioBrightness",
+);
 
 export default class GameManager {
-  constructor(clientSocket) {
+  constructor(clientSocket, arduinoSerialPort) {
     this.clientSocket = clientSocket;
+    this.arduinoSerialPort = arduinoSerialPort;
     this.stepScene = stepScene;
 
     this.scene = null;
     this.phase = "IDLE";
     this.reminderIndex = 0;
     this.reminderTimer = null;
+    this.audioBrightnessTimer = null;
     this.oldAudio = null;
 
     this.globalDialog = [
@@ -46,6 +56,7 @@ export default class GameManager {
 
     switch (parseMessage.event) {
       case "START_GAME":
+        this.arduinoSerialPort.send({ event: "START_GAME" });
         this.start("INTRODUCTION");
         break;
       case "AUDIO_ENDED":
@@ -68,6 +79,46 @@ export default class GameManager {
   playAudio(file) {
     console.log(`Lecture audio : ${file} est en cours...`);
     this.clientSocket.broadcast({ event: "PLAY_AUDIO", audioId: file });
+    this.startAudioBrightness(file);
+  }
+
+  startAudioBrightness(file) {
+    console.log(`Luminosité audio pour ${file} est en cours...`);
+    clearInterval(this.audioBrightnessTimer);
+    this.audioBrightnessTimer = null;
+
+    try {
+      const brightnessFile = file.replace(/\.mp3$/i, ".json");
+      const brightness = JSON.parse(
+        readFileSync(resolve(brightnessDirectory, brightnessFile), "utf8"),
+      );
+      let index = 0;
+
+      const sendNextValue = () => {
+        if (index >= brightness.values.length) {
+          this.stopAudioBrightness();
+          return;
+        }
+
+        const value = brightness.values[index];
+        this.arduinoSerialPort.send({ event: "AUDIO_BRIGHTNESS", value });
+        console.log(`Luminosité audio : ${value} (index ${index})`);
+        index++;
+      };
+
+      sendNextValue();
+      this.audioBrightnessTimer = setInterval(sendNextValue, brightness.stepMs);
+    } catch (error) {
+      console.log(`Erreur lors de la lecture de la luminosité pour ${file}: ${error.message}`);
+      this.arduinoSerialPort.send({ event: "AUDIO_BRIGHTNESS", value: 0 });
+      console.error(`Pas de luminosité pour ${file}: ${error.message}`);
+    }
+  }
+
+  stopAudioBrightness() {
+    clearInterval(this.audioBrightnessTimer);
+    this.audioBrightnessTimer = null;
+    this.arduinoSerialPort.send({ event: "AUDIO_BRIGHTNESS", value: 0 });
   }
 
   start(sceneId) {
@@ -86,10 +137,17 @@ export default class GameManager {
 
     console.log(`SCÈNE ${sceneId} a démarré`);
 
+    const sceneMessageArduino = {
+      event: "CHANGE_SCENE",
+      scene: sceneId,
+      led: scene.led,
+    };
+    this.arduinoSerialPort.send(sceneMessageArduino);
+
     // ===== Front Debug =====
     this.clientSocket.broadcast({
       event: "DEBUG_SCENE",
-      message: sceneId,
+      scene: sceneId,
     });
     // =======================
 
@@ -127,6 +185,8 @@ export default class GameManager {
   // =============================================================================
 
   onAudioEnded() {
+    this.stopAudioBrightness();
+
     // Si introduction est terminée on passe à l'étape d'attente.
     if (this.phase === "INTRO") {
       this.startWaiting();
@@ -168,6 +228,7 @@ export default class GameManager {
   onActionDetected() {
     console.log(`Action terminée (${this.scene.id})`);
     this.stopReminders();
+    this.stopAudioBrightness();
     this.clientSocket.broadcast({ event: "STOP_AUDIO" });
 
     const dialogSuccess = this.scene.audio?.success;
@@ -185,6 +246,7 @@ export default class GameManager {
       this.start(nextScene);
     } else {
       this.phase = "COMPLETED";
+      this.arduinoSerialPort.send({ event: "STOP_GAME" });
       console.log("Fin du jeu");
     }
   }

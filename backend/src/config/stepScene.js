@@ -40,7 +40,7 @@ export const stepScene = [
     id: "EARS",
     title: "Ears",
     led: 2,
-    expectedEvent: { event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" },
+    expectedEvent: { event: "ARDUINO_ACTION", action: "EAR_PRESSED" },
     audio: {
       introduction: null,
       reminders: [
@@ -57,7 +57,7 @@ export const stepScene = [
     id: "EYES",
     title: "Eyes",
     led: 3,
-    expectedEvent: { event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" },
+    expectedEvent: { event: "ARDUINO_ACTION", action: "LIGHT_DETECTED" },
     audio: {
       introduction: null,
       reminders: [
@@ -74,7 +74,7 @@ export const stepScene = [
     id: "NOSE",
     title: "Nose",
     led: 4,
-    expectedEvent: { event: "ARDUINO_ACTION", action: "PLAYER_DETECTED" },
+    expectedEvent: { event: "ARDUINO_ACTION", action: "NOSE_ROTATED" },
     audio: {
       introduction: null,
       reminders: [
