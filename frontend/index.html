@@ -8,18 +8,20 @@
     <title>frontend</title>
   </head>
   <body>
-    <!-- <button id="test-audio">Play audio</button>
-    <button id="send">Send to server</button>
-    <button id="recognition-button">Reconnaissance vocale</button>
-    <p id="spoken-word"></p>
-    <p id="element-word"></p> -->
-
     <div class="game-container">
       <button id="start-game">Start the game</button>
       <div class="action-buttons">
-        <button class="pass-btn" id="pass-action-arduino">
-          Pass Arduion action
-        </button>
+        <div class="arduino-action">
+          <button class="pass-btn" id="pass-action-arduino">
+            Pass Arduion action
+          </button>
+          <select id="scene-select">
+            <option value="PLAYER_DETECTED">Player detected</option>
+            <option value="EAR_PRESSED">Ears</option>
+            <option value="LIGHT_DETECTED">Eyes</option>
+            <option value="NOSE_ROTATED">Nose</option>
+          </select>
+        </div>
         <button class="pass-btn" id="pass-action-speech">
           Pass Speech action
         </button>

@@ -5,7 +5,7 @@
 Servo servo;
 
 const int PHOTO_PIN = 0;
-const int SERVO_PIN = 8;
+const int SERVO_PIN = 13;
 
 
 //-----------------light----------------

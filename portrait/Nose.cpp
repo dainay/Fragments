@@ -50,13 +50,13 @@ bool noseRotation() {
 
   bool rotated = fabs(rotation) >= 170;
 
-  // Serial.print("Rotation: ");
-  // Serial.print(rotation, 1);
+  Serial.print("Rotation: ");
+  Serial.print(rotation, 1);
 
-  // Serial.print(" | Rotated: ");
-  // Serial.println(rotated);
+  Serial.print(" | Rotated: ");
+  Serial.println(rotated);
 
-  // delay(200);
+  delay(200);
   
   return  rotated ;
 }

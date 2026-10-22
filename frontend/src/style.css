@@ -63,3 +63,11 @@ body{
 #current-scene, #current-audio{
     color:#ffaf2e;
 }
+
+.arduino-action{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+
+}

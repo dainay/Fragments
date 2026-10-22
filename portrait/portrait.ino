@@ -113,8 +113,14 @@ void updateEyeTracking() {
 
 void loop() {
 
+
+ledShow(2);
   receiveMessages();
 
+bool check = lightRead(900);
+Serial.println(check);
+//noseRotation();
+delay(1000);
   if (!GAME_STARTED) {
     return;
   }

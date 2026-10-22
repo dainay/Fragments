@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "Led.h"
 
-const int LED_PINS[] = {9, 10, 11, 12};
+const int LED_PINS[] = {8, 9, 10, 11};
 const int LED_COUNT = 4;
 
 void ledBegin() {

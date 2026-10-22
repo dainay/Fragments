@@ -15,17 +15,17 @@ const arduinoActionsByScene = {
 
 // Pass arduino action button
 const passArduinoActionButton = document.getElementById("pass-action-arduino");
+const sceneSelect = document.getElementById("scene-select");
 passArduinoActionButton.addEventListener("click", () => {
-  const action = arduinoActionsByScene[currentScene];
+  // récupérer la scène sélectionnée dans le select
+  const action = sceneSelect.value || arduinoActionsByScene[currentScene];
 
   if (!action) {
     console.log(`Pas d'action Arduino pour la scène ${currentScene}`);
     return;
   }
 
-  socketManager.send(
-    JSON.stringify({ event: "ARDUINO_ACTION", action }),
-  );
+  socketManager.send(JSON.stringify({ event: "ARDUINO_ACTION", action }));
 });
 
 // Pass speech action button
