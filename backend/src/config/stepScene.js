@@ -13,9 +13,9 @@ export const stepScene = [
         "SCENE_INTRODUCTION_04.mp3",
         "SCENE_INTRODUCTION_05.mp3",
       ],
-      success: null,
+      success: "SCENE_INTRODUCTION_SUCCESS.mp3",
     },
-    reminderDelay: 2000,
+    reminderDelay: 6500,
     nextScene: "MOUTH",
   },
   {
@@ -24,12 +24,12 @@ export const stepScene = [
     led: 1,
     expectedEvent: { event: "SPEECH_ACTION", transcript: "oui" },
     audio: {
-      introduction: "SCENE_MOUTH_INTRODUCTION.mp3",
+      introduction: null,
       reminders: [
         "SCENE_MOUTH_01.mp3",
         "SCENE_MOUTH_02.mp3",
-        "SCENE_MOUTH_03.mp3",
-        "SCENE_MOUTH_04.mp3",
+        // "SCENE_MOUTH_03.mp3", // HELP PAS DIRE "OUI"
+        // "SCENE_MOUTH_04.mp3",
       ],
       success: null,
     },
@@ -48,9 +48,9 @@ export const stepScene = [
         "SCENE_EARS_02.mp3",
         "SCENE_EARS_03.mp3",
       ],
-      success: "SCENE_EARS_INTRODUCTION.mp3",
+      success: "SCENE_EARS_SUCCESS.mp3",
     },
-    reminderDelay: 2000,
+    reminderDelay: 5000,
     nextScene: "EYES",
   },
   {
@@ -60,14 +60,10 @@ export const stepScene = [
     expectedEvent: { event: "ARDUINO_ACTION", action: "LIGHT_DETECTED" },
     audio: {
       introduction: null,
-      reminders: [
-        "SCENE_EYES_01.mp3",
-        "SCENE_EYES_02.mp3",
-        "SCENE_EYES_03.mp3",
-      ],
-      success: "SCENE_EYES_INTRODUCTION.mp3",
+      reminders: ["SCENE_EYE_01.mp3", "SCENE_EYE_02.mp3", "SCENE_EYE_03.mp3"],
+      success: "SCENE_EYE_SUCCESS.mp3",
     },
-    reminderDelay: 2000,
+    reminderDelay: 5000,
     nextScene: "NOSE",
   },
   {
@@ -78,13 +74,26 @@ export const stepScene = [
     audio: {
       introduction: null,
       reminders: [
-        "SCENE_NOSE_01.mp3",
-        "SCENE_NOSE_02.mp3",
-        "SCENE_NOSE_03.mp3",
+        "SCENE_FRONT_01.mp3",
+        "SCENE_FRONT_02.mp3",
+        "SCENE_FRONT_03.mp3",
       ],
-      success: "SCENE_NOSE_INTRODUCTION.mp3",
+      success: "SCENE_FRONT_SUCCESS.mp3",
     },
-    reminderDelay: 2000,
+    reminderDelay: 5000,
+    nextScene: "FINAL",
+  },
+  {
+    id: "FINAL",
+    title: "Final",
+    led: null,
+    expectedEvent: null,
+    audio: {
+      introduction: "SCENE_FINAL.mp3",
+      reminders: [],
+      success: null,
+    },
+    reminderDelay: 4000,
     nextScene: null,
   },
 ];

@@ -7,7 +7,7 @@ export default class AudioManager {
   play(fileName) {
     this.audio.pause();
     this.audio.currentTime = 0;
-    this.audio.src = `audio/${fileName}`;
+    this.audio.src = `audio2/${fileName}`;
     return this.audio.play();
   }
 
