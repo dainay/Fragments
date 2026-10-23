@@ -37,10 +37,10 @@ void setup() {
   startDistance();
   ledBegin();
   //eyeLookAt(EYE_CENTER_ANGLE);
-  digitalWrite(8, HIGH);
-  digitalWrite(9, HIGH);
-  digitalWrite(10, HIGH);
-  digitalWrite(11, HIGH);
+  digitalWrite(8, LOW); // Eteindre les leds
+  digitalWrite(9, LOW);
+  digitalWrite(10, LOW);
+  digitalWrite(11, LOW);
   Serial.println("démarrage");
   // ---- @todo test du servo pour voir que ça fonctionne bien !!! ----
   // testServo.attach(SERVO_PIN); 
