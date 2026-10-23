@@ -1,12 +1,12 @@
 #include <Arduino.h>
 #include "Distance.h"
 
-const int TRIG_PIN_LEFT = 3;
-const int ECHO_PIN_LEFT = 4;
+const int TRIG_PIN_LEFT = A1;
+const int ECHO_PIN_LEFT = A2;
 
-const int TRIG_PIN_RIGHT = 6;
-const int ECHO_PIN_RIGHT = 7;
-const float PLAYER_DISTANCE_CM = 100.0;
+const int TRIG_PIN_RIGHT = 4;
+const int ECHO_PIN_RIGHT = 3;
+const float PLAYER_DISTANCE_CM = 60.0;
 
 void startDistance() {
   pinMode(TRIG_PIN_LEFT, OUTPUT);
@@ -32,6 +32,9 @@ float readDistance(int trigPin, int echoPin) {
   if (duration == 0) {
     return -1;
   }
+
+  // Serial.println(duration / 58.0);
+  // Serial.println("dist  ncz");
 
   return duration / 58.0;
 }

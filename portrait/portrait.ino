@@ -21,9 +21,9 @@ bool ACTION_SENT = false;
 String ACTIVE_SCENE = "IDLE";
 String playerPosition = "far";
 
-const int EYE_LEFT_ANGLE = 60;
-const int EYE_CENTER_ANGLE = 90;
-const int EYE_RIGHT_ANGLE = 120;
+const int EYE_LEFT_ANGLE = 50;
+const int EYE_CENTER_ANGLE = 110;
+const int EYE_RIGHT_ANGLE = 170;
 const unsigned long PLAYER_CHECK_INTERVAL = 500;
 
 unsigned long lastPlayerCheck = 0;
@@ -36,7 +36,7 @@ void setup() {
   mouthStart();
   startDistance();
   ledBegin();
-  //eyeLookAt(EYE_CENTER_ANGLE);
+  eyeLookAt(EYE_CENTER_ANGLE);
   digitalWrite(8, LOW); // Eteindre les leds
   digitalWrite(9, LOW);
   digitalWrite(10, LOW);
@@ -122,11 +122,11 @@ void updateEyeTracking() {
   playerPosition = humanDetected();
 
   if (playerPosition == "onLeft") {
-    //eyeLookAt(EYE_LEFT_ANGLE); // à décommenter quand on aura les capteurs de distance
+    eyeLookAt(EYE_LEFT_ANGLE); // à décommenter quand on aura les capteurs de distance
   } else if (playerPosition == "onRight") {
-    //eyeLookAt(EYE_RIGHT_ANGLE); 
+    eyeLookAt(EYE_RIGHT_ANGLE); 
   } else {
-    //eyeLookAt(EYE_CENTER_ANGLE);
+    eyeLookAt(EYE_CENTER_ANGLE);
   }
 }
 
@@ -156,16 +156,20 @@ void loop() {
 
 // bool check = earPress();
 
-// bool check = lightRead(910);
+// bool check = lightRead(500);
 //  bool check = noseRotation();
 //   Serial.println(check);
-  //eyeLookAt(0);
-  // delay(500);
-  //eyeLookAt(150);
+  //eyeLookAt(EYE_LEFT_ANGLE);
+  //delay(500);
+  //eyeLookAt(170);
   // Serial.println(check);
-
   
-  // updateEyeTracking(); //
+
+  String check = humanDetected();
+  // Serial.println(check);
+  updateEyeTracking();
+
+
   if (ACTION_SENT) {
     return;
   }

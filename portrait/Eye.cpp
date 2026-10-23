@@ -5,7 +5,7 @@
 Servo servo;
 
 const int PHOTO_PIN = 0;
-const int SERVO_PIN = 7; // @neroliprak -> y'aura un soucis ? puisque dans distance le echo est déjà branché dans PIN 7
+const int SERVO_PIN = 7; // pas 7 : c'est l'écho du capteur de distance droit (Distance.cpp)
 
 
 //-----------------light----------------
@@ -19,6 +19,6 @@ void eyeBegin() {
 }
  
 void eyeLookAt(int horizontal) {
-  servo.write(horizontal); 
-  Serial.println("servo horizontal");
+  servo.write(horizontal);
+  // Serial.println("servo horizontal"); // appelé toutes les 500 ms : inonderait le terminal Node
 }
