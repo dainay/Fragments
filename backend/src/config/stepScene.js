@@ -15,7 +15,7 @@ export const stepScene = [
       ],
       success: "SCENE_INTRODUCTION_SUCCESS.mp3",
     },
-    reminderDelay: 6500,
+    reminderDelay: 4000,
     nextScene: "MOUTH",
   },
   {
@@ -33,7 +33,7 @@ export const stepScene = [
       ],
       success: null,
     },
-    reminderDelay: 4000,
+    reminderDelay: 2000,
     nextScene: "EARS",
   },
   {
@@ -50,7 +50,7 @@ export const stepScene = [
       ],
       success: "SCENE_EARS_SUCCESS.mp3",
     },
-    reminderDelay: 5000,
+    reminderDelay: 4000,
     nextScene: "EYES",
   },
   {
@@ -63,7 +63,7 @@ export const stepScene = [
       reminders: ["SCENE_EYE_01.mp3", "SCENE_EYE_02.mp3", "SCENE_EYE_03.mp3"],
       success: "SCENE_EYE_SUCCESS.mp3",
     },
-    reminderDelay: 5000,
+    reminderDelay: 4000,
     nextScene: "NOSE",
   },
   {
@@ -80,13 +80,13 @@ export const stepScene = [
       ],
       success: "SCENE_FRONT_SUCCESS.mp3",
     },
-    reminderDelay: 5000,
+    reminderDelay: 4000,
     nextScene: "FINAL",
   },
   {
     id: "FINAL",
     title: "Final",
-    led: null,
+    led: 4, // toutes les LEDs restent allumées pendant l'audio final (STOP_GAME les éteint à la fin)
     expectedEvent: null,
     audio: {
       introduction: "SCENE_FINAL.mp3",

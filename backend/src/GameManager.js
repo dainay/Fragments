@@ -59,6 +59,7 @@ export default class GameManager {
       // Frontend envoie "START_GAME" quand on appuie sur le bouton "Démarrer le jeu".
       case "START_GAME":
         this.arduinoSerialPort.send({ event: "START_GAME" });
+        // L'ambiance est lancée par le front dès l'ouverture de la page (main.js)
         this.start("INTRODUCTION");
         break;
       case "AUDIO_ENDED":
@@ -257,6 +258,7 @@ export default class GameManager {
     } else {
       this.phase = "COMPLETED";
       this.arduinoSerialPort.send({ event: "STOP_GAME" });
+      // L'ambiance continue après la fin du jeu (pour l'arrêter : broadcast STOP_AMBIANCE)
       console.log("Fin du jeu");
     }
   }

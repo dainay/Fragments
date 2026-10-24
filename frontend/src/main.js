@@ -6,12 +6,25 @@ const socketManager = new SocketManager("ws://localhost:8080");
 const audioManager = new AudioManager();
 let currentScene = null;
 
+// ===== Ambiance : se joue en continu dès l'ouverture de la page =====
+function startAmbiance() {
+  audioManager.playAmbianceGameLoop();
+}
+startAmbiance();
+// Si le navigateur a bloqué le son, elle démarre à la première interaction (clic, touche…)
+["click", "keydown", "touchstart"].forEach((type) => {
+  document.addEventListener(type, startAmbiance, { once: true });
+});
+
 const arduinoActionsByScene = {
   INTRODUCTION: "PLAYER_DETECTED",
   EARS: "EAR_PRESSED",
   EYES: "LIGHT_DETECTED",
   NOSE: "NOSE_ROTATED",
 };
+
+// lancement de l'ambiance sound
+// this.audioManager.playAmbianceGameLoop();
 
 // Pass arduino action button
 const passArduinoActionButton = document.getElementById("pass-action-arduino");
@@ -103,8 +116,6 @@ audioManager.onEnded(() => {
   socketManager.send(JSON.stringify({ event: "AUDIO_ENDED" }));
 });
 
-// Une fonction qui permet de gérer les messages reçus depuis le serveur poru les afficher au front
-
 // Message reçu depuis le serveur
 socketManager.onMessage = (data) => {
   let message = JSON.parse(data);
@@ -118,6 +129,12 @@ socketManager.onMessage = (data) => {
       break;
     case "SPEECH_ACTION":
       activateSpeechRecognition();
+      break;
+    case "PLAY_AMBIANCE":
+      audioManager.playAmbianceGameLoop();
+      break;
+    case "STOP_AMBIANCE":
+      audioManager.fadeOutAmbiance();
       break;
     case "STOP_SPEECH":
       speechRecognitionManager.stop();

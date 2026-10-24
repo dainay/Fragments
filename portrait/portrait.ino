@@ -37,15 +37,29 @@ void setup() {
   startDistance();
   ledBegin();
   eyeLookAt(EYE_CENTER_ANGLE);
-  digitalWrite(8, LOW); // Eteindre les leds
-  digitalWrite(9, LOW);
-  digitalWrite(10, LOW);
-  digitalWrite(11, LOW);
+  digitalWrite(8, LOW); // L'OEUIL
+  digitalWrite(9, LOW); // SOURCIL
+  digitalWrite(10, LOW); // BOUCHE
+  digitalWrite(11, LOW); // OREILLE
   Serial.println("démarrage");
   // ---- @todo test du servo pour voir que ça fonctionne bien !!! ----
   // testServo.attach(SERVO_PIN); 
   // ---- @todo -----------------------------------------------------
 
+}
+
+unsigned long lastLightDebug = 0;
+
+// DEBUG : envoie la valeur brute de la photorésistance toutes les 500 ms
+void debugLight() {
+  if (millis() - lastLightDebug < 500) {
+    return;
+  }
+  lastLightDebug = millis();
+
+  Serial.print("{\"event\":\"DEBUG_LIGHT\",\"value\":");
+  Serial.print(analogRead(A0));
+  Serial.println("}");
 }
 
 // reçoit les messages du serveur pour gérer les scène / actions actuelles
@@ -154,18 +168,21 @@ void loop() {
 //    return;
 //  }
 
+// TEST désactivé : le delay(500) faisait perdre les messages de Node (dont CHANGE_SCENE → LEDs)
 // bool check = earPress();
 
-// bool check = lightRead(500);
+//bool check = lightRead(1022);
 //  bool check = noseRotation();
 //   Serial.println(check);
   //eyeLookAt(EYE_LEFT_ANGLE);
   //delay(500);
   //eyeLookAt(170);
   // Serial.println(check);
+
+  // delay(500);
   
 
-  String check = humanDetected();
+  // String check = humanDetected();
   // Serial.println(check);
   updateEyeTracking();
 
@@ -187,8 +204,9 @@ void loop() {
     }
   }
   // Capteur de luminosité
-  else if (ACTIVE_SCENE == "EYES") {
-    if (lightRead(900)) {
+    else if (ACTIVE_SCENE == "EYES") {
+      debugLight();
+    if (lightRead(10230)) {
       sendAction("LIGHT_DETECTED");
     }
   }

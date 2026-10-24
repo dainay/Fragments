@@ -48,7 +48,7 @@ bool noseRotation() {
     rotation += 360;
   }
 
-  bool rotated = fabs(rotation) >= 170;
+  bool rotated = fabs(rotation) >= 15;
 
   Serial.print("Rotation: ");
   Serial.print(rotation, 1);
