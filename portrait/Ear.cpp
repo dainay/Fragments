@@ -16,7 +16,7 @@ void earBegin() {
 
 bool earPress() {
 
-  Serial.print("ear called");
+  // Serial.print("ear called");
   bool pressed = digitalRead(BUTTON_PIN) == LOW;
 
   if (!pressed) {

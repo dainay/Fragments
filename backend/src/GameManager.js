@@ -15,22 +15,22 @@ export default class GameManager {
     this.stepScene = stepScene;
 
     this.scene = null;
-    this.phase = "IDLE";
+    this.phase = "IDLE"; // Scène en attente au début (avant qu'on ait appuyé sur le btn valdier)
     this.reminderIndex = 0;
     this.reminderTimer = null;
     this.audioBrightnessTimer = null;
     this.oldAudio = null;
 
     this.globalDialog = [
-      "SCENE_DIALOGUE_01.mp3",
-      "SCENE_DIALOGUE_02.mp3",
-      "SCENE_DIALOGUE_03.mp3",
-      "SCENE_DIALOGUE_04.mp3",
-      "SCENE_DIALOGUE_05.mp3",
-      "SCENE_DIALOGUE_06.mp3",
-      "SCENE_DIALOGUE_07.mp3",
-      "SCENE_DIALOGUE_08.mp3",
-      "SCENE_DIALOGUE_09.mp3",
+      "SCENE_GLOBAL_01.mp3",
+      "SCENE_GLOBAL_02.mp3",
+      "SCENE_GLOBAL_03.mp3",
+      "SCENE_GLOBAL_04.mp3",
+      "SCENE_GLOBAL_05.mp3",
+      "SCENE_GLOBAL_06.mp3",
+      "SCENE_GLOBAL_07.mp3",
+      "SCENE_GLOBAL_08.mp3",
+      "SCENE_GLOBAL_09.mp3",
     ];
   }
 
@@ -49,14 +49,17 @@ export default class GameManager {
   handleMessage(message) {
     let parseMessage = this.parseJsonMessage(message);
 
+    // on ignore tout sauf si le jeu est démarré par nous.
     if (!this.scene && parseMessage.event !== "START_GAME") {
       console.log("Jeu pas démarré, message ignoré :", parseMessage.event);
       return;
     }
 
     switch (parseMessage.event) {
+      // Frontend envoie "START_GAME" quand on appuie sur le bouton "Démarrer le jeu".
       case "START_GAME":
         this.arduinoSerialPort.send({ event: "START_GAME" });
+        // L'ambiance est lancée par le front dès l'ouverture de la page (main.js)
         this.start("INTRODUCTION");
         break;
       case "AUDIO_ENDED":
@@ -83,7 +86,7 @@ export default class GameManager {
   }
 
   startAudioBrightness(file) {
-    console.log(`Luminosité audio pour ${file} est en cours...`);
+    // console.log(`Luminosité audio pour ${file} est en cours...`);
     clearInterval(this.audioBrightnessTimer);
     this.audioBrightnessTimer = null;
 
@@ -102,14 +105,16 @@ export default class GameManager {
 
         const value = brightness.values[index];
         this.arduinoSerialPort.send({ event: "AUDIO_BRIGHTNESS", value });
-        console.log(`Luminosité audio : ${value} (index ${index})`);
+        // console.log(`Luminosité audio : ${value} (index ${index})`);
         index++;
       };
 
       sendNextValue();
       this.audioBrightnessTimer = setInterval(sendNextValue, brightness.stepMs);
     } catch (error) {
-      console.log(`Erreur lors de la lecture de la luminosité pour ${file}: ${error.message}`);
+      console.log(
+        `Erreur lors de la lecture de la luminosité pour ${file}: ${error.message}`,
+      );
       this.arduinoSerialPort.send({ event: "AUDIO_BRIGHTNESS", value: 0 });
       console.error(`Pas de luminosité pour ${file}: ${error.message}`);
     }
@@ -177,6 +182,12 @@ export default class GameManager {
     // S'il y a des scènes de relance
     if (this.scene.audio?.reminders?.length > 0) {
       this.scheduleNextReminder();
+    }
+
+    // pour la scène FINAL car il se joue direct après la scène du nez
+    if (!this.scene.expectedEvent) {
+      this.goToNextScene();
+      return;
     }
   }
 
@@ -247,6 +258,7 @@ export default class GameManager {
     } else {
       this.phase = "COMPLETED";
       this.arduinoSerialPort.send({ event: "STOP_GAME" });
+      // L'ambiance continue après la fin du jeu (pour l'arrêter : broadcast STOP_AMBIANCE)
       console.log("Fin du jeu");
     }
   }
